@@ -6,7 +6,7 @@
 import os
 import re
 from dataclasses import MISSING, dataclass, field
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 from omegaconf import OmegaConf
 
@@ -400,7 +400,7 @@ class TrainerConfig:
             "choices": ["cpu", "gpu", "tpu", "ipu", "mps", "auto"],
         },
     )
-    devices: Optional[int] = field(
+    devices: Any = field(
         default=-1,
         metadata={
             "help": "Number of devices to train on. -1 uses all available devices."

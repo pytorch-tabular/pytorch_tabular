@@ -1143,7 +1143,16 @@ def test_tta_regression(
 
 
 def _run_model_compare(
-    task, model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric, custom_fit_params={},
+    task,
+    model_list,
+    data_config,
+    trainer_config,
+    optimizer_config,
+    train,
+    test,
+    metric,
+    rank_metric,
+    custom_fit_params={},
 ):
     model_list = copy.deepcopy(model_list)
     if isinstance(model_list, list):
@@ -1249,12 +1258,16 @@ def test_model_compare_regression(regression_data, model_list, continuous_cols, 
     # best_models = comp_df.loc[comp_df[f"test_{rank_metric[0]}"] == best_score, "model"].values.tolist()
     # assert best_model.model._get_name() in best_models
 
+
 @pytest.mark.parametrize("model_list", ["lite", MODEL_CONFIG_MODEL_SWEEP_TEST])
 @pytest.mark.parametrize("continuous_cols", [list(DATASET_CONTINUOUS_COLUMNS)])
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
-@pytest.mark.parametrize("metric", [
+@pytest.mark.parametrize(
+    "metric",
+    [
         (["mean_squared_error"], [{}], [False]),
-    ])
+    ],
+)
 @pytest.mark.parametrize("rank_metric", [("loss", "lower_is_better")])
 @pytest.mark.parametrize(
     "custom_fit_params",
@@ -1263,11 +1276,13 @@ def test_model_compare_regression(regression_data, model_list, continuous_cols, 
             "loss": torch.nn.L1Loss(),
             "metrics": [fake_metric],
             "metrics_prob_inputs": [True],
-            "optimizer":  torch.optim.Adagrad,
+            "optimizer": torch.optim.Adagrad,
         },
-    ]
+    ],
 )
-def test_model_compare_custom(regression_data, model_list, continuous_cols, categorical_cols, metric, rank_metric, custom_fit_params):
+def test_model_compare_custom(
+    regression_data, model_list, continuous_cols, categorical_cols, metric, rank_metric, custom_fit_params
+):
     (train, test, target) = regression_data
     data_config = DataConfig(
         target=target,
@@ -1285,7 +1300,16 @@ def test_model_compare_custom(regression_data, model_list, continuous_cols, cate
     )
     optimizer_config = OptimizerConfig()
     comp_df, best_model = _run_model_compare(
-        "regression", model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric, custom_fit_params=custom_fit_params
+        "regression",
+        model_list,
+        data_config,
+        trainer_config,
+        optimizer_config,
+        train,
+        test,
+        metric,
+        rank_metric,
+        custom_fit_params=custom_fit_params,
     )
     if model_list == "lite":
         assert len(comp_df) == 3
@@ -1293,6 +1317,7 @@ def test_model_compare_custom(regression_data, model_list, continuous_cols, cate
         assert len(comp_df) == len(model_list)
     if custom_fit_params.get("metric", None) == fake_metric:
         assert "test_fake_metric" in comp_df.columns()
+
 
 @pytest.mark.parametrize("model_config_class", MODEL_CONFIG_SAVE_TEST)
 @pytest.mark.parametrize("continuous_cols", [list(DATASET_CONTINUOUS_COLUMNS)])

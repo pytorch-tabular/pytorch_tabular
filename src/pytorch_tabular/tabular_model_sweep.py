@@ -92,6 +92,7 @@ def _validate_args(
     experiment_config: Optional[Union[ExperimentConfig, str]] = None,
     common_model_args: Optional[dict] = {},
     rank_metric: Optional[str] = "loss",
+    custom_fit_params: Optional[dict] = {},
 ):
     assert task in [
         "classification",
@@ -149,6 +150,8 @@ def _validate_args(
         "lower_is_better",
         "higher_is_better",
     ], "rank_metric[1] must be one of ['lower_is_better', 'higher_is_better'], but" f" got {rank_metric[1]}"
+    if "metrics" in custom_fit_params.keys():
+        assert rank_metric[0] == "loss", "only loss is supported as the rank_metric when using custom metrics"
 
 
 def model_sweep(
@@ -172,6 +175,7 @@ def model_sweep(
     progress_bar: bool = True,
     verbose: bool = True,
     suppress_lightning_logger: bool = True,
+    custom_fit_params: Optional[dict] = {},
 ):
     """Compare multiple models on the same dataset.
 
@@ -231,6 +235,10 @@ def model_sweep(
 
         suppress_lightning_logger (bool, optional): If True, will suppress the lightning logger. Defaults to True.
 
+        custom_fit_params (dict, optional): A dict specifying custom loss, metrics and optimizer.
+                The behviour of these custom parameters is similar to those passed through the `fit` method
+                of `TabularModel`.
+
         Returns:
             results: Training results.
 
@@ -252,6 +260,7 @@ def model_sweep(
         experiment_config=experiment_config,
         common_model_args=common_model_args,
         rank_metric=rank_metric,
+        custom_fit_params=custom_fit_params,
     )
     if suppress_lightning_logger:
         suppress_lightning_logs()
@@ -326,7 +335,7 @@ def model_sweep(
             name = tabular_model.name
             if verbose:
                 logger.info(f"Training {name}")
-            model = tabular_model.prepare_model(datamodule)
+            model = tabular_model.prepare_model(datamodule, **custom_fit_params)
             if progress_bar:
                 progress.update(task_p, description=f"Training {name}", advance=1)
             with OutOfMemoryHandler(handle_oom=True) as handler:

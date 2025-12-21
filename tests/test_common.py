@@ -1316,7 +1316,7 @@ def test_model_compare_custom(
     else:
         assert len(comp_df) == len(model_list)
     if fake_metric in custom_fit_params.get("metrics", []):
-        assert "test_fake_metric" in comp_df.columns()
+        assert "test_fake_metric" in comp_df.columns
 
 
 @pytest.mark.parametrize("model_config_class", MODEL_CONFIG_SAVE_TEST)

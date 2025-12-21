@@ -1315,7 +1315,7 @@ def test_model_compare_custom(
         assert len(comp_df) == 3
     else:
         assert len(comp_df) == len(model_list)
-    if custom_fit_params.get("metric", None) == fake_metric:
+    if fake_metric in custom_fit_params.get("metrics", []):
         assert "test_fake_metric" in comp_df.columns()
 
 

@@ -236,7 +236,7 @@ def model_sweep(
         suppress_lightning_logger (bool, optional): If True, will suppress the lightning logger. Defaults to True.
 
         custom_fit_params (dict, optional): A dict specifying custom loss, metrics and optimizer.
-                The behviour of these custom parameters is similar to those passed through the `fit` method
+                The behaviour of these custom parameters is similar to those passed through the `fit` method
                 of `TabularModel`.
 
         Returns:

@@ -1,9 +1,20 @@
 name: Testing
 
 on:
-    push:
-        branches: [main]
-    pull_request: {}
+  push:
+    paths-ignore:
+      - 'docs/**'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}-${{ github.head_ref }}
@@ -16,13 +27,7 @@ jobs:
             fail-fast: false
             matrix:
                 os: [ubuntu-latest]
-                python-version: ["3.8", "3.9", "3.10"]
-                include:
-                    - { os: "ubuntu-20.04", python-version: "3.8", requires: "oldest" }
-                    - { os: "ubuntu-20.04", python-version: "3.9", requires: "oldest" }
-
-        env:
-            TORCH_URL: "https://download.pytorch.org/whl/cpu/torch_stable.html"
+                python-version: ["3.10"]
 
         steps:
             - uses: actions/checkout@v4
@@ -42,7 +47,7 @@ jobs:
 
             - name: Install main package & dependencies
               run: |
-                  pip install -e .[extra] -r requirements/dev.txt -f ${TORCH_URL}
+                  pip install -e .[dev,extra] -f ${TORCH_URL}
                   pip list
 
             - name: Restore test's datasets

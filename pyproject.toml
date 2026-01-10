@@ -31,9 +31,8 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 
-urls = {
-    Homepage = "https://github.com/manujosephv/pytorch_tabular"
-}
+[project.urls]
+Homepage = "https://github.com/pytorch-tabular/pytorch_tabular"
 
 
 dependencies = [

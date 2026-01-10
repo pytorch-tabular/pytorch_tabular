@@ -43,7 +43,7 @@ jobs:
 
             - name: Install main package & dependencies
               run: |
-                  pip install -e .[dev,extra] -f ${TORCH_URL}
+                  pip install -e .[dev,extra]
                   pip list
 
             - name: Restore test's datasets

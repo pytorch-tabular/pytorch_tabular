@@ -92,16 +92,6 @@ where = ["src"]
 include = ["pytorch_tabular", "pytorch_tabular.*"]
 
 
-[tool.setuptools]
-include-package-data = true
-zip-safe = false
-
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["pytorch_tabular", "pytorch_tabular.*"]
-
-
 [tool.ruff]
 target-version = "py38"
 line-length = 120

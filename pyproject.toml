@@ -80,7 +80,13 @@ extra = [
     "captum>=0.5.0,<0.8.0",
 ]
 
+
+[project.urls]
+Homepage = "https://github.com/pytorch-tabular/pytorch_tabular"
+
+
 [build-system]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=78.1.1",

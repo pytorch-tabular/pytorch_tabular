@@ -47,15 +47,9 @@ dependencies = [
     "scipy>=1.8,<2.0",
     "omegaconf>=2.3.0",
     "torchmetrics>=0.10.0,<1.7.0",
-    "tensorboard>2.2.0,!=2.5.0",
-    "protobuf>=3.20.0,<5.30.0",
     "pytorch-tabnet==4.1",
-    "PyYAML>=5.4,<6.1.0",
-    "matplotlib>3.1",
-    "ipywidgets",
     "einops>=0.6.0,<0.8.0",
     "rich>=11.0.0",
-    "fsspec>=2022.5.0,<2024.4.0; python_version == '3.8'",
 ]
 
 
@@ -78,6 +72,11 @@ extra = [
     "plotly>=5.13.0,<5.25.0",
     "kaleido>=0.2.0,<0.3.0",
     "captum>=0.5.0,<0.8.0",
+]
+
+notebooks = [
+    "ipywidgets",
+    "matplotlib>3.1",
 ]
 
 

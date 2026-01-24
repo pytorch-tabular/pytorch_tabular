@@ -47,13 +47,10 @@ dependencies = [
     "rich>=11.0.0",
     "fsspec>=2022.5.0,<2024.4.0",
 ]
+
+
 [project.optional-dependencies]
-extra = [
-    "wandb>=0.15.0,<0.19.0",
-    "plotly>=5.13.0,<5.25.0",
-    "kaleido>=0.2.0,<0.3.0",
-    "captum>=0.5.0,<0.8.0",
-]
+
 dev = [
     "wget",
     "bump2version==1.0.1",
@@ -64,6 +61,13 @@ dev = [
     "pytest>=5.3.2",
     "pytest-runner>=5.1",
     "torch_optimizer",
+]
+
+extra = [
+    "wandb>=0.15.0,<0.19.0",
+    "plotly>=5.13.0,<5.25.0",
+    "kaleido>=0.2.0,<0.3.0",
+    "captum>=0.5.0,<0.8.0",
 ]
 
 [build-system]

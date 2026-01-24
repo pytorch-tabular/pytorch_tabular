@@ -48,8 +48,9 @@ jobs:
         shell: python
 
       - name: Install main package & dependencies
-        run: |
-          uv pip install -e .[dev,extra]
+        run: uv pip install -e .[dev,extra]
+        env:
+          UV_SYSTEM_PYTHON: 1
 
       - name: Show installed packages
         run: uv pip list

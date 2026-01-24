@@ -8,7 +8,17 @@ license = { text = "MIT" }
 authors = [
     { name = "Manu Joseph", email = "manujosephv@gmail.com" }
 ]
+
 requires-python = ">=3.10,<3.15"
+
+keywords = [
+    "pytorch",
+    "tabular",
+    "pytorch-lightning",
+    "neural network",
+]
+
+
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

@@ -92,9 +92,15 @@ requires = [
   "setuptools>=78.1.1",
 ]
 
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["pytorch_tabular*"]
+where = ["src"]
+include = ["pytorch_tabular", "pytorch_tabular.*"]
 namespaces = false
 
 [tool.ruff]

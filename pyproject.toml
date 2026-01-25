@@ -62,7 +62,7 @@ dependencies = [
     "scipy==1.14.1",
     "omegaconf==2.3.0",
     "torchmetrics==1.5.2",
-    "einops==0.8.0,
+    "einops==0.8.0",
 ]
 
 

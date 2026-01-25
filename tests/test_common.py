@@ -1223,10 +1223,14 @@ def test_model_compare_classification(
     comp_df, best_model = _run_model_compare(
         "classification", model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric
     )
-    if model_list == "lite":
-        assert len(comp_df) == 3
+    if model_list == "lite" and TABNET_AVAILABLE:
+        expected_len = 3
+    elif model_list == "lite" and not TABNET_AVAILABLE:
+        expected_len = 2
     else:
-        assert len(comp_df) == len(model_list)
+        expected_len = len(model_list)
+
+    assert len(comp_df) == expected_len
     # best_score = comp_df[f"test_{rank_metric[0]}"].values.tolist()[0]
     # # there may be multiple models with the same score
     # best_models = comp_df.loc[comp_df[f"test_{rank_metric[0]}"] == best_score, "model"].values.tolist()
@@ -1263,10 +1267,14 @@ def test_model_compare_regression(regression_data, model_list, continuous_cols, 
     comp_df, best_model = _run_model_compare(
         "regression", model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric
     )
-    if model_list == "lite":
-        assert len(comp_df) == 3
+    if model_list == "lite" and TABNET_AVAILABLE:
+        expected_len = 3
+    elif model_list == "lite" and not TABNET_AVAILABLE:
+        expected_len = 2
     else:
-        assert len(comp_df) == len(model_list)
+        expected_len = len(model_list)
+
+    assert len(comp_df) == expected_len
     # best_score = comp_df[f"test_{rank_metric[0]}"].values.tolist()[0]
     # # there may be multiple models with the same score
     # best_models = comp_df.loc[comp_df[f"test_{rank_metric[0]}"] == best_score, "model"].values.tolist()

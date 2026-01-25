@@ -17,7 +17,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pytest:
+  test-no-extras:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]  #macos-latest fails downloads, see #593
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - run: git remote set-branches origin 'main'
+
+      - run: git fetch --depth 1
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install main package & dependencies
+        run: uv pip install -e .[dev]
+        env:
+          UV_SYSTEM_PYTHON: 1
+
+      - name: Show installed packages
+        run: uv pip list
+
+      - name: Run test-suite
+        run: python -m pytest -v
+
+
+  test-all-extras:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -60,7 +97,7 @@ jobs:
         run: uv pip list
 
       - name: Restore test's datasets
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: tests/.datasets
           key: test-datasets
@@ -69,7 +106,7 @@ jobs:
         run: python -m pytest -v
 
       - name: Save test's datasets
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: tests/.datasets
           key: test-datasets

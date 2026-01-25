@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Tests for `pytorch_tabular` package."""
 
+from skbase.utils.dependencies import _check_soft_dependencies
 from skbase.utils.git_diff import _is_module_changed
 import pytest
 
@@ -8,9 +9,12 @@ from pytorch_tabular import TabularModel
 from pytorch_tabular.config import DataConfig, OptimizerConfig, TrainerConfig
 from pytorch_tabular.models import TabNetModelConfig
 
+# todo: move the logic to skip soft dependency dependent estimators to tags etc
+TABNET_AVAILABLE = _check_soft_dependencies("pytorch-tabnet", severity="none")
+
 
 @pytest.mark.skipif(
-    not _is_module_changed("pytorch_tabular.models.tabnet"),
+    not _is_module_changed("pytorch_tabular.models.tabnet") or not TABNET_AVAILABLE,
     reason="run test only if tabnet module is changed",
 )
 @pytest.mark.parametrize("multi_target", [True, False])
@@ -84,7 +88,7 @@ def test_regression(
 
 
 @pytest.mark.skipif(
-    not _is_module_changed("pytorch_tabular.models.tabnet"),
+    not _is_module_changed("pytorch_tabular.models.tabnet") or not TABNET_AVAILABLE,
     reason="run test only if tabnet module is changed",
 )
 @pytest.mark.parametrize("multi_target", [False, True])

@@ -3,6 +3,7 @@
 ## 1.2.0 (2026-01-26)
 
 * Compatibility with Python up to version 3.14, end-of-life Python 3.8 and 3.9
+* Compatibility with newer `lightning` versions - @phoeenniixx in https://github.com/pytorch-tabular/pytorch_tabular/pull/625
 * Support for model stacking - @taimo3810 in https://github.com/pytorch-tabular/pytorch_tabular/pull/520
 * Support for Multi-GPU Training - @sorenmacbeth in https://github.com/pytorch-tabular/pytorch_tabular/pull/517
 
@@ -19,6 +20,7 @@
 * [ENH] Make tensor dtypes `np.float32` for MPS devices by @sorenmacbeth in https://github.com/pytorch-tabular/pytorch_tabular/pull/540
 * [ENH] Optimizer lr scheduler interval by @sorenmacbeth in https://github.com/pytorch-tabular/pytorch_tabular/pull/545
 * [ENH] add conditional test skips to estimator specific tests by @fkiraly in https://github.com/pytorch-tabular/pytorch_tabular/pull/607
+* [ENH] Ensure compatibility with `lightning > 2.6` and above by @phoeenniixx in https://github.com/pytorch-tabular/pytorch_tabular/pull/625
 
 ### Documentation
 
@@ -116,6 +118,23 @@
 * @enifeder made their first contribution in https://github.com/pytorch-tabular/pytorch_tabular/pull/551
 * @fkiraly made their first contribution in https://github.com/pytorch-tabular/pytorch_tabular/pull/594
 * @phoeenniixx made their first contribution in https://github.com/pytorch-tabular/pytorch_tabular/pull/596
+
+## All Contributors
+
+@abhisharsinha,
+@ArozHada,
+@Borda,
+@charitarthchugh,
+@enifeder,
+@fkiraly,
+@furyhawk,
+@HernandoR,
+@manujosephv,
+@phoeenniixx,
+@snehilchatterjee,
+@sorenmacbeth,
+@taimo3810,
+@YonyBresler
 
 
 ---

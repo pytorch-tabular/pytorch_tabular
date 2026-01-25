@@ -79,7 +79,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install main package & dependencies
-        run: uv pip install -e .[dev, dependencies_2024]
+        run: uv pip install -e .[dev,dependencies_2024]
         env:
           UV_SYSTEM_PYTHON: 1
 

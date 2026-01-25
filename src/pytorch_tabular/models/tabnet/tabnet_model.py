@@ -13,8 +13,10 @@ from skbase.utils.dependencies import _check_soft_dependencies, _safe_import
 from ..base_model import BaseModel
 
 
-create_group_matrix = _safe_import("pytorch_tabnet.utils.create_group_matrix")
-TabNet = _safe_import("pytorch_tabnet.tab_network.TabNet")
+create_group_matrix = _safe_import(
+    "pytorch_tabnet.utils.create_group_matrix", pkg_name="pytorch-tabnet"
+)
+TabNet = _safe_import("pytorch_tabnet.tab_network.TabNet", pkg_name="pytorch-tabnet")
 
 
 class TabNetBackbone(nn.Module):

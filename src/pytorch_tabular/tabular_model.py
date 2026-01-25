@@ -12,7 +12,7 @@ import warnings
 from collections import defaultdict
 from functools import partial
 from pathlib import Path
-from pprint import pformat
+from pprint import pformat, pprint
 from typing import Callable, Dict, Iterable, List, Optional, Tuple, Union
 
 import joblib
@@ -32,8 +32,6 @@ from pytorch_lightning.callbacks.gradient_accumulation_scheduler import (
 from pytorch_lightning.tuner.tuning import Tuner
 from pytorch_lightning.utilities.model_summary import summarize
 from pytorch_lightning.utilities.rank_zero import rank_zero_only
-from rich import print as rich_print
-from rich.pretty import pprint
 from sklearn.base import TransformerMixin
 from sklearn.model_selection import BaseCrossValidator, KFold, StratifiedKFold
 from torch import nn
@@ -1675,14 +1673,14 @@ class TabularModel:
         elif self.has_model:
             print(summarize(self.model, max_depth=max_depth))
         else:
-            rich_print(f"[bold green]{self.__class__.__name__}[/bold green]")
-            rich_print("-" * 100)
-            rich_print("[bold yellow]Config[/bold yellow]")
-            rich_print("-" * 100)
+            print(self.__class__.__name__)
+            print("-" * 100)
+            print("Config")
+            print("-" * 100)
             pprint(self.config.__dict__["_content"])
-            rich_print(
-                ":triangular_flag:[bold red]Full Model Summary once model has "
-                "been initialized or passed in as an argument[/bold red]"
+            print(
+                "⚠ Full Model Summary once model has been initialized "
+                "or passed in as an argument"
             )
 
     def ret_summary(self, model=None, max_depth: int = -1) -> str:

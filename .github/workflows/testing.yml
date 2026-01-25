@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]  #macos-latest fails downloads, see #593
         python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:

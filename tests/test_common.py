@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 import torch
 from scipy.stats import uniform
+from skbase.utils.dependencies import _check_soft_dependencies
 from sklearn.metrics import accuracy_score, r2_score
 from sklearn.model_selection import KFold
 
@@ -542,6 +543,10 @@ def _test_captum(
     assert exp.shape[1] == tabular_model.model.hparams.continuous_dim + tabular_model.model.hparams.categorical_dim
 
 
+@pytest.mark.skipif(
+    not _check_soft_dependencies("captum", severity="none"),
+    reason="skip captum integration test if captum is not installed",
+)
 @pytest.mark.parametrize("model_config_class", MODEL_CONFIG_CAPTUM_TEST)
 @pytest.mark.parametrize("continuous_cols", [list(DATASET_CONTINUOUS_COLUMNS)])
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"], []])
@@ -592,6 +597,10 @@ def test_captum_integration_regression(
     )
 
 
+@pytest.mark.skipif(
+    not _check_soft_dependencies("captum", severity="none"),
+    reason="skip captum integration test if captum is not installed",
+)
 @pytest.mark.parametrize("model_config_class", MODEL_CONFIG_CAPTUM_TEST)
 @pytest.mark.parametrize(
     "continuous_cols",

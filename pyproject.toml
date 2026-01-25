@@ -46,7 +46,7 @@ dependencies = [
     "pytorch-lightning>=2.0.0,<2.5.0",
     "scipy>=1.8,<2.0",
     "omegaconf>=2.3.0",
-    "torchmetrics>=0.10.0,<1.7.0",
+    "torchmetrics>=0.10.0,<1.9.0",
     "pytorch-tabnet==4.1",
     "einops>=0.6.0,<0.8.0",
     "rich>=11.0.0",

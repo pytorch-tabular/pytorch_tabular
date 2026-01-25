@@ -52,6 +52,20 @@ dependencies = [
     "scikit-base",
 ]
 
+# Core Dep set in Nov 2024
+dependencies = [
+    "torch==2.5.0",
+    "numpy==2.2.0",
+    "pandas==2.2.3",
+    "scikit-learn==1.6.0",
+    "pytorch-lightning==2.4.0",
+    "scipy==1.14.1",
+    "omegaconf==2.3.0",
+    "torchmetrics==1.5.2",
+    "einops==0.8.0,
+    "rich==13.9.4",
+]
+
 
 [project.optional-dependencies]
 

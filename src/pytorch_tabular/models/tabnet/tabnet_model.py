@@ -8,10 +8,13 @@ from typing import Dict
 import torch
 import torch.nn as nn
 from omegaconf import DictConfig
-from pytorch_tabnet.tab_network import TabNet
-from pytorch_tabnet.utils import create_group_matrix
+from skbase.utils.dependencies import _check_soft_dependencies, _safe_import
 
 from ..base_model import BaseModel
+
+
+create_group_matrix = _safe_import("pytorch_tabnet.utils.create_group_matrix")
+TabNet = _safe_import("pytorch_tabnet.tab_network.TabNet")
 
 
 class TabNetBackbone(nn.Module):
@@ -81,6 +84,7 @@ class TabNetModel(BaseModel):
             "classification",
         ], "TabNet is only implemented for Regression and Classification"
         super().__init__(config, **kwargs)
+        _check_soft_dependencies("pytorch-tabnet", obj=self)
 
     @property
     def backbone(self):

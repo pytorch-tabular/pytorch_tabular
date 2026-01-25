@@ -8,6 +8,7 @@ import warnings
 from abc import ABCMeta, abstractmethod
 from functools import partial
 from typing import Any, Callable, Dict, List, Optional, Tuple, Type, Union
+from pathlib import Path
 
 import numpy as np
 import pytorch_lightning as pl
@@ -205,6 +206,28 @@ class BaseModel(pl.LightningModule, metaclass=ABCMeta):
     @property
     def head(self):
         raise NotImplementedError("head property needs to be implemented by inheriting classes")
+
+    @classmethod
+    def load_from_checkpoint(
+        cls,
+        checkpoint_path: Union[str, Path],
+        map_location=None,
+        strict=True,
+        **kwargs,
+    ):
+        from skbase.utils.dependencies import _check_soft_dependencies
+
+        if not _check_soft_dependencies("pytorch_lightning<2.6", severity="none"):
+            if "weights_only" not in kwargs:
+                kwargs["weights_only"] = False
+        else:
+            kwargs.pop("weights_only")
+        return super().load_from_checkpoint(
+            checkpoint_path,
+            map_location=map_location,
+            strict=strict,
+            **kwargs,
+        )
 
     def _check_and_verify(self):
         assert hasattr(self, "backbone"), "Model has no attribute called `backbone`"

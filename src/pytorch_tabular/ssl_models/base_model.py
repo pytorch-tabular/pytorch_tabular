@@ -5,7 +5,8 @@
 
 import warnings
 from abc import ABCMeta, abstractmethod
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
+from pathlib import Path
 
 import pytorch_lightning as pl
 import torch
@@ -150,6 +151,28 @@ class SSLBaseModel(pl.LightningModule, metaclass=ABCMeta):
     @abstractmethod
     def featurize(self, x: Dict):
         pass
+
+    @classmethod
+    def load_from_checkpoint(
+        cls,
+        checkpoint_path: Union[str, Path],
+        map_location=None,
+        strict=True,
+        **kwargs,
+    ):
+        from skbase.utils.dependencies import _check_soft_dependencies
+
+        if not _check_soft_dependencies("pytorch_lightning<2.6", severity="none"):
+            if "weights_only" not in kwargs:
+                kwargs["weights_only"] = False
+        else:
+            kwargs.pop("weights_only")
+        return super().load_from_checkpoint(
+            checkpoint_path,
+            map_location=map_location,
+            strict=strict,
+            **kwargs,
+        )
 
     def predict(self, x: Dict, ret_model_output: bool = True):  # ret_model_output only for compatibility
         assert ret_model_output, "ret_model_output must be True in case of SSL predict"

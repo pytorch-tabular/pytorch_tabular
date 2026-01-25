@@ -20,7 +20,7 @@ if not os.path.isfile(DATASET_ZIP_OCCUPANCY):
 
 
 def load_regression_data():
-    DATA_SIZE= 500
+    DATA_SIZE = 200
     dataset = fetch_california_housing(data_home="data", as_frame=True)
     df = dataset.frame.sample(DATA_SIZE)
     df["HouseAgeBin"] = pd.qcut(df["HouseAge"], q=4)
@@ -32,7 +32,7 @@ def load_regression_data():
 
 
 def load_classification_data():
-    DATA_SIZE= 500
+    DATA_SIZE = 200
     dataset = fetch_covtype(data_home="data")
     data = np.hstack([dataset.data, dataset.target.reshape(-1, 1)])[:DATA_SIZE, :]
     col_names = [f"feature_{i}" for i in range(data.shape[-1])]

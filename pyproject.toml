@@ -1,6 +1,6 @@
 [project]
 name = "pytorch_tabular"
-version = "1.1.1"
+version = "1.2.0"
 description = "A standard framework for using Deep Learning for tabular data"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { text = "MIT" }

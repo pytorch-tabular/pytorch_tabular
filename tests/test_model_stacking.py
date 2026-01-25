@@ -1,4 +1,5 @@
 import numpy as np
+from skbase.utils.git_diff import _is_module_changed
 import pytest
 import torch
 from sklearn.preprocessing import PowerTransformer
@@ -50,6 +51,10 @@ def get_model_configs(task):
     return [model_config(task) for model_config in all_model_configs]
 
 
+@pytest.mark.skipif(
+    not _is_module_changed("pytorch_tabular.models.stacking"),
+    reason="run test only if stacking module is changed",
+)
 @pytest.mark.parametrize("multi_target", [True, False])
 @pytest.mark.parametrize(
     "continuous_cols",
@@ -163,6 +168,10 @@ def test_regression(
     assert pred_df.shape[0] == test.shape[0]
 
 
+@pytest.mark.skipif(
+    not _is_module_changed("pytorch_tabular.models.stacking"),
+    reason="run test only if stacking module is changed",
+)
 @pytest.mark.parametrize("multi_target", [False, True])
 @pytest.mark.parametrize(
     "continuous_cols",

@@ -221,7 +221,7 @@ class BaseModel(pl.LightningModule, metaclass=ABCMeta):
             if "weights_only" not in kwargs:
                 kwargs["weights_only"] = False
         else:
-            kwargs.pop("weights_only")
+            kwargs.pop("weights_only", None)
         return super().load_from_checkpoint(
             checkpoint_path,
             map_location=map_location,

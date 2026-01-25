@@ -30,12 +30,19 @@ from pytorch_tabular.ssl_models import DenoisingAutoEncoderConfig
 # import os
 
 
+# todo: move the logic to skip soft dependency dependent estimators to tags etc
+TABNET_AVAILABLE = _check_soft_dependencies("pytorch-tabnet", severity="none")
+
+
 MODEL_CONFIG_SAVE_TEST = [
     (CategoryEmbeddingModelConfig, {"layers": "10-20"}),
     (GANDALFConfig, {}),
     (NodeConfig, {"num_trees": 100, "depth": 2}),
-    (TabNetModelConfig, {"n_a": 2, "n_d": 2}),
 ]
+if TABNET_AVAILABLE:
+    MODEL_CONFIG_SAVE_TEST.append(
+        (TabNetModelConfig, {"n_a": 2, "n_d": 2}),
+    )
 
 MODEL_CONFIG_SAVE_ONNX_TEST = [
     (CategoryEmbeddingModelConfig, {"layers": "10-20"}),
@@ -65,14 +72,22 @@ MODEL_CONFIG_FEATURE_IMP_TEST = [
 MODEL_CONFIG_CAPTUM_TEST = [
     (FTTransformerConfig, {"num_heads": 1, "num_attn_blocks": 1}),
     (GANDALFConfig, {}),
-    (TabNetModelConfig, {}),
 ]
+
+if TABNET_AVAILABLE:
+    MODEL_CONFIG_CAPTUM_TEST.append(
+        (TabNetModelConfig, {}),
+    )
 
 MODEL_CONFIG_MODEL_SWEEP_TEST = [
     (FTTransformerConfig, {"num_heads": 1, "num_attn_blocks": 1}),
     (GANDALFConfig, {}),
-    (TabNetModelConfig, {}),
 ]
+
+if TABNET_AVAILABLE:
+    MODEL_CONFIG_MODEL_SWEEP_TEST.append(
+        (TabNetModelConfig, {}),
+    )
 
 DATASET_CONTINUOUS_COLUMNS = (
     "AveRooms",

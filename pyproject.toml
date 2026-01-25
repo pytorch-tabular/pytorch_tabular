@@ -50,6 +50,7 @@ dependencies = [
     "pytorch-tabnet==4.1",
     "einops>=0.6.0,<0.8.0",
     "rich>=11.0.0",
+    "scikit-base",
 ]
 
 

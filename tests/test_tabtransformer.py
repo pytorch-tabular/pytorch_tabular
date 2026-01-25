@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Tests for `pytorch_tabular` package."""
 
+from skbase.utils.git_diff import _is_module_changed
 import pytest
 
 from pytorch_tabular import TabularModel
@@ -9,6 +10,10 @@ from pytorch_tabular.config import DataConfig, OptimizerConfig, TrainerConfig
 from pytorch_tabular.models import TabTransformerConfig
 
 
+@pytest.mark.skipif(
+    not _is_module_changed("pytorch_tabular.models.tab_transformer"),
+    reason="run test only if tab_transformer module is changed",
+)
 @pytest.mark.parametrize("multi_target", [True, False])
 @pytest.mark.parametrize(
     "continuous_cols",
@@ -84,6 +89,10 @@ def test_regression(
     assert pred_df.shape[0] == test.shape[0]
 
 
+@pytest.mark.skipif(
+    not _is_module_changed("pytorch_tabular.models.tab_transformer"),
+    reason="run test only if tab_transformer module is changed",
+)
 @pytest.mark.parametrize("multi_target", [False, True])
 @pytest.mark.parametrize(
     "continuous_cols",

@@ -1,14 +1,16 @@
 ![PyTorch Tabular](docs/imgs/pytorch_tabular_logo.png)
 
-[![pypi](https://img.shields.io/pypi/v/pytorch_tabular.svg)](https://pypi.python.org/pypi/pytorch_tabular)
-[![Testing](https://github.com/manujosephv/pytorch_tabular/actions/workflows/testing.yml/badge.svg?event=push)](https://github.com/manujosephv/pytorch_tabular/actions/workflows/testing.yml)
-[![documentation status](https://readthedocs.org/projects/pytorch_tabular/badge/?version=latest)](https://pytorch-tabular.readthedocs.io/en/latest/)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/manujosephv/pytorch_tabular/main.svg)](https://results.pre-commit.ci/latest/github/manujosephv/pytorch_tabular/main)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/manujosephv/pytorch_tabular/blob/main/docs/tutorials/01-Basic_Usage.ipynb)
+_PyTorch Tabular_ provides a unified interface to deep learning architectures for tabular data. It provides a high-level API and uses [PyTorch Lightning](https://pytorch-lightning.readthedocs.io/) to scale training on GPU or CPU, with automatic logging.
 
-![PyPI - Downloads](https://img.shields.io/pypi/dm/pytorch_tabular)
-[![DOI](https://zenodo.org/badge/321584367.svg)](https://zenodo.org/badge/latestdoi/321584367)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/manujosephv/pytorch_tabular/issues)
+|  | **[Documentation](https://pytorch-tabular.readthedocs.io/en/latest/)** · **[Tutorials](https://pytorch-tabular.readthedocs.io/en/latest/tutorials/01-Approaching%20Any%20Tabular%20Problem%20with%20PyTorch%20Tabular/)** · [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/manujosephv/pytorch_tabular/blob/main/docs/tutorials/01-Basic_Usage.ipynb) · **[Release Notes](https://pytorch-tabular.readthedocs.io/en/latest/history/)** |
+|---|---|
+| **Open&#160;Source** | [![MIT](https://img.shields.io/github/license/pytorch-tabular/pytorch_tabular)](https://github.com/pytorch-tabular/pytorch_tabular/blob/master/LICENSE) [![GC.OS Sponsored](https://img.shields.io/badge/GC.OS-Sponsored%20Project-orange.svg?style=flat&colorA=0eac92&colorB=2077b4)](https://gc-os-ai.github.io/) [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/manujosephv/pytorch_tabular/issues)
+|
+| **Community** | [![!discord](https://img.shields.io/static/v1?logo=discord&label=discord&message=chat&color=lightgreen)](https://discord.com/invite/54ACzaFsn7) [![!slack](https://img.shields.io/static/v1?logo=linkedin&label=LinkedIn&message=news&color=lightblue)](https://www.linkedin.com/company/german-center-for-open-source-ai/) |
+| **CI/CD** | [![github-actions](https://img.shields.io/github/actions/workflow/status/pytorch-tabular/pytorch_tabular/releasing.yml?logo=github)](https://github.com/pytorch-tabular/pytorch_tabular/actions/workflows/releasing.yml) [![readthedocs](https://img.shields.io/readthedocs/pytorch-tabular?logo=readthedocs)](https://pytorch-tabular.readthedocs.io) |
+| **Code** | [![!pypi](https://img.shields.io/pypi/v/pytorch-tabular?color=orange)](https://pypi.org/project/pytorch-tabular/) [![!conda](https://img.shields.io/conda/vn/conda-forge/pytorch-tabular)](https://anaconda.org/conda-forge/pytorch-tabular) [![!python-versions](https://img.shields.io/pypi/pyversions/pytorch-tabular)](https://www.python.org/) [![!black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)  |
+| **Downloads** | ![PyPI - Downloads](https://img.shields.io/pypi/dw/pytorch-tabular) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pytorch-tabular) [![Downloads](https://static.pepy.tech/personalized-badge/pytorch-tabular?period=total&units=international_system&left_color=grey&right_color=blue&left_text=cumulative%20(pypi))](https://pepy.tech/project/pytorch-tabular) |
+| **Citation** | [![DOI](https://zenodo.org/badge/321584367.svg)](https://zenodo.org/badge/latestdoi/321584367) |
 
 PyTorch Tabular aims to make Deep Learning with Tabular data easy and accessible to real-world cases and research alike. The core principles behind the design of the library are:
 

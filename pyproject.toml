@@ -53,7 +53,7 @@ dependencies = [
 ]
 
 # Core Dep set in Nov 2024
-dependencies = [
+dependencies_2024 = [
     "torch==2.5.0",
     "numpy==2.2.0",
     "pandas==2.2.3",

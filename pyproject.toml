@@ -63,7 +63,6 @@ dependencies = [
     "omegaconf==2.3.0",
     "torchmetrics==1.5.2",
     "einops==0.8.0,
-    "rich==13.9.4",
 ]
 
 

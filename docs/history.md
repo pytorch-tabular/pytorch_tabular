@@ -1,9 +1,10 @@
-# History
+# Changelog
 
 ## 1.2.0 (2026-01-26)
 
 * Compatibility with Python up to version 3.14, end-of-life Python 3.8 and 3.9
-
+* Support for model stacking - @taimo3810 in https://github.com/pytorch-tabular/pytorch_tabular/pull/520
+* Support for Multi-GPU Training - @sorenmacbeth in https://github.com/pytorch-tabular/pytorch_tabular/pull/517
 
 ### Enhancements
 
@@ -12,8 +13,7 @@
 * [ENH] Add multi target classification by @YonyBresler in https://github.com/pytorch-tabular/pytorch_tabular/pull/441
 * [ENH] Feature/tuner multiple model by @ProgramadorArtificial in https://github.com/pytorch-tabular/pytorch_tabular/pull/461
 * [ENH] Add dataloader_kwargs support in DataConfig by @snehilchatterjee in https://github.com/pytorch-tabular/pytorch_tabular/pull/492
-* [ENH] Adding informative str and repr  by @manujosephv in https://github.com/pytorch-tabular/pytorch_tabular/pull/507
-* [ENH] Fix SSL finetuning bug by @manujosephv in https://github.com/pytorch-tabular/pytorch_tabular/pull/510
+* [ENH] Adding informative str and repr by @manujosephv in https://github.com/pytorch-tabular/pytorch_tabular/pull/507
 * [ENH] Enable Support for Multi-GPU Training by @sorenmacbeth in https://github.com/pytorch-tabular/pytorch_tabular/pull/517
 * [ENH] Add Built-in Support for Model Stacking by @taimo3810 in https://github.com/pytorch-tabular/pytorch_tabular/pull/520
 * [ENH] Make tensor dtypes `np.float32` for MPS devices by @sorenmacbeth in https://github.com/pytorch-tabular/pytorch_tabular/pull/540
@@ -98,6 +98,7 @@
 * [BUG] Bug fix for saving and loading custom loss functions by @manujosephv in https://github.com/pytorch-tabular/pytorch_tabular/pull/415
 * [BUG] Fix to Tuner change trainer and optimizer configs >>Change batch_size in tuner by @ProgramadorArtificial in https://github.com/pytorch-tabular/pytorch_tabular/pull/449
 * [BUG] Bug fix for "Categorical" dtype by @snehilchatterjee in https://github.com/pytorch-tabular/pytorch_tabular/pull/493
+* [BUG] Fix SSL finetuning bug by @manujosephv in https://github.com/pytorch-tabular/pytorch_tabular/pull/510
 * [BUG] Torch load issue fix with pytorch 2.6 by @ArozHada in https://github.com/pytorch-tabular/pytorch_tabular/pull/543
 * [BUG] torch.load fix for all pytorch versions. by @ArozHada in https://github.com/pytorch-tabular/pytorch_tabular/pull/554
 * [BUG] minor bug fix by @enifeder in https://github.com/pytorch-tabular/pytorch_tabular/pull/551

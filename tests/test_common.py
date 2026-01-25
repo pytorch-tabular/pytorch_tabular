@@ -30,12 +30,19 @@ from pytorch_tabular.ssl_models import DenoisingAutoEncoderConfig
 # import os
 
 
+# todo: move the logic to skip soft dependency dependent estimators to tags etc
+TABNET_AVAILABLE = _check_soft_dependencies("pytorch-tabnet", severity="none")
+
+
 MODEL_CONFIG_SAVE_TEST = [
     (CategoryEmbeddingModelConfig, {"layers": "10-20"}),
     (GANDALFConfig, {}),
     (NodeConfig, {"num_trees": 100, "depth": 2}),
-    (TabNetModelConfig, {"n_a": 2, "n_d": 2}),
 ]
+if TABNET_AVAILABLE:
+    MODEL_CONFIG_SAVE_TEST.append(
+        (TabNetModelConfig, {"n_a": 2, "n_d": 2}),
+    )
 
 MODEL_CONFIG_SAVE_ONNX_TEST = [
     (CategoryEmbeddingModelConfig, {"layers": "10-20"}),
@@ -65,14 +72,22 @@ MODEL_CONFIG_FEATURE_IMP_TEST = [
 MODEL_CONFIG_CAPTUM_TEST = [
     (FTTransformerConfig, {"num_heads": 1, "num_attn_blocks": 1}),
     (GANDALFConfig, {}),
-    (TabNetModelConfig, {}),
 ]
+
+if TABNET_AVAILABLE:
+    MODEL_CONFIG_CAPTUM_TEST.append(
+        (TabNetModelConfig, {}),
+    )
 
 MODEL_CONFIG_MODEL_SWEEP_TEST = [
     (FTTransformerConfig, {"num_heads": 1, "num_attn_blocks": 1}),
     (GANDALFConfig, {}),
-    (TabNetModelConfig, {}),
 ]
+
+if TABNET_AVAILABLE:
+    MODEL_CONFIG_MODEL_SWEEP_TEST.append(
+        (TabNetModelConfig, {}),
+    )
 
 DATASET_CONTINUOUS_COLUMNS = (
     "AveRooms",
@@ -1208,10 +1223,14 @@ def test_model_compare_classification(
     comp_df, best_model = _run_model_compare(
         "classification", model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric
     )
-    if model_list == "lite":
-        assert len(comp_df) == 3
+    if model_list == "lite" and TABNET_AVAILABLE:
+        expected_len = 3
+    elif model_list == "lite" and not TABNET_AVAILABLE:
+        expected_len = 2
     else:
-        assert len(comp_df) == len(model_list)
+        expected_len = len(model_list)
+
+    assert len(comp_df) == expected_len
     # best_score = comp_df[f"test_{rank_metric[0]}"].values.tolist()[0]
     # # there may be multiple models with the same score
     # best_models = comp_df.loc[comp_df[f"test_{rank_metric[0]}"] == best_score, "model"].values.tolist()
@@ -1248,10 +1267,14 @@ def test_model_compare_regression(regression_data, model_list, continuous_cols, 
     comp_df, best_model = _run_model_compare(
         "regression", model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric
     )
-    if model_list == "lite":
-        assert len(comp_df) == 3
+    if model_list == "lite" and TABNET_AVAILABLE:
+        expected_len = 3
+    elif model_list == "lite" and not TABNET_AVAILABLE:
+        expected_len = 2
     else:
-        assert len(comp_df) == len(model_list)
+        expected_len = len(model_list)
+
+    assert len(comp_df) == expected_len
     # best_score = comp_df[f"test_{rank_metric[0]}"].values.tolist()[0]
     # # there may be multiple models with the same score
     # best_models = comp_df.loc[comp_df[f"test_{rank_metric[0]}"] == best_score, "model"].values.tolist()

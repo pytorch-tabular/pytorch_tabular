@@ -7,6 +7,7 @@ from typing import Callable, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 from rich.progress import Progress, track
+from skbase.utils.dependencies import _check_soft_dependencies
 
 from pytorch_tabular import TabularModel, models
 from pytorch_tabular.config import (
@@ -75,6 +76,22 @@ MODEL_SWEEP_PRESETS = {
     "full": [m for m in available_models() if m not in ["MDNConfig", "NodeConfig"]],
     "high_memory": [m for m in available_models() if m not in ["MDNConfig"]],
 }
+
+# todo: replace this with tag-based soft dependency checks
+if not _check_soft_dependencies("pytorch-tabnet", severity="none"):
+    REMOVE_MODELS = ["TabNetModelConfig"]
+    MODEL_SWEEP_PRESETS["lite"] = [
+        m for m in MODEL_SWEEP_PRESETS["lite"] if m[0] not in REMOVE_MODELS
+    ]
+    MODEL_SWEEP_PRESETS["standard"] = [
+        m for m in MODEL_SWEEP_PRESETS["standard"] if m[0] not in REMOVE_MODELS
+    ]
+    MODEL_SWEEP_PRESETS["full"] = [
+        m for m in MODEL_SWEEP_PRESETS["full"] if m not in REMOVE_MODELS
+    ]
+    MODEL_SWEEP_PRESETS["high_memory"] = [
+        m for m in MODEL_SWEEP_PRESETS["high_memory"] if m not in REMOVE_MODELS
+    ]
 
 
 def _validate_args(

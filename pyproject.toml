@@ -85,7 +85,7 @@ dependencies_2024 = [
     "torch==2.5.0",
     "numpy==2.2.0",
     "pandas==2.2.3",
-    "scikit-learn==1.6.0",
+    "scikit-learn==1.7.2",
     "pytorch-lightning==2.4.0",
     "scipy==1.14.1",
     "omegaconf==2.3.0",

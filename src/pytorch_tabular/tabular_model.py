@@ -25,7 +25,7 @@ from omegaconf import OmegaConf
 from omegaconf.dictconfig import DictConfig
 from pandas import DataFrame
 from pytorch_lightning import seed_everything
-from pytorch_lightning.callbacks import RichProgressBar
+from pytorch_lightning.callbacks import RichProgressBar, TQDMProgressBar
 from pytorch_lightning.callbacks.gradient_accumulation_scheduler import (
     GradientAccumulationScheduler,
 )
@@ -321,6 +321,10 @@ class TabularModel:
             self.config.enable_checkpointing = False
         if self.config.progress_bar == "rich" and self.config.trainer_kwargs.get("enable_progress_bar", True):
             callbacks.append(RichProgressBar())
+        elif self.config.progress_bar == "simple" and self.config.trainer_kwargs.get("enable_progress_bar", True):
+            callbacks.append(TQDMProgressBar())
+        elif self.config.progress_bar == "none":
+            self.config.trainer_kwargs["enable_progress_bar"] = False
         if self.verbose:
             logger.debug(f"Callbacks used: {callbacks}")
         return callbacks

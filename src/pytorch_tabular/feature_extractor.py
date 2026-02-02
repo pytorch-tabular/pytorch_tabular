@@ -4,7 +4,7 @@
 from collections import defaultdict
 
 import pandas as pd
-from rich.progress import track
+from pytorch_tabular.utils.progress import get_progress_tracker
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from pytorch_tabular.models import NODEModel, TabNetModel
@@ -65,7 +65,7 @@ class DeepFeatureExtractor(BaseEstimator, TransformerMixin):
         self.tabular_model.model.eval()
         inference_dataloader = self.tabular_model.datamodule.prepare_inference_dataloader(X_encoded)
         logits_predictions = defaultdict(list)
-        for batch in track(inference_dataloader, description="Generating Features..."):
+        for batch in get_progress_tracker("rich")(inference_dataloader, description="Generating Features..."):
             for k, v in batch.items():
                 if isinstance(v, list) and (len(v) == 0):
                     # Skipping empty list

@@ -356,7 +356,7 @@ class TrainerConfig:
         track_grad_norm (int): Track and Log Gradient Norms in the logger. -1 by default means no tracking.
                 1 for the L1 norm, 2 for L2 norm, etc.
 
-        progress_bar (str): Progress bar type. Can be one of: `none`, `simple`, `rich`. Defaults to `rich`.
+        progress_bar (str): Progress bar type. Can be one of: `none`, `simple`, `rich`. Defaults to `simple`.
 
         precision (str): Precision of the model. Defaults to `32`. See
                 https://lightning.ai/docs/pytorch/stable/common/trainer.html#precision
@@ -541,7 +541,7 @@ class TrainerConfig:
     )
     progress_bar: str = field(
         default="simple",
-        metadata={"help": "Progress bar type. Can be one of: `none`, `simple`, `rich`. Defaults to `rich`."},
+        metadata={"help": "Progress bar type. Can be one of: `none`, `simple`, `rich`. Defaults to `simple`."},
     )
     precision: str = field(
         default="32",

@@ -6,7 +6,7 @@ from typing import Callable, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
-from rich.progress import Progress, track
+from pytorch_tabular.utils.progress import get_progress_context, get_progress_tracker
 from skbase.utils.dependencies import _check_soft_dependencies
 
 from pytorch_tabular import TabularModel, models
@@ -321,8 +321,8 @@ def model_sweep(
     best_model = None
     is_lower_better = rank_metric[1] == "lower_is_better"
     best_score = 1e9 if is_lower_better else -1e9
-    it = track(model_list, description="Sweeping Models") if progress_bar else model_list
-    ctx = Progress() if progress_bar else nullcontext()
+    it = get_progress_tracker("rich" if progress_bar else "none")(model_list, description="Sweeping Models")
+    ctx = get_progress_context("rich" if progress_bar else "none")
     with ctx as progress:
         if progress_bar:
             task_p = progress.add_task("Sweeping Models", total=len(model_list))

@@ -40,15 +40,15 @@ def get_progress_tracker(backend: str = "none", description: Optional[str] = Non
             return partial(track, description=description) if description else track
         except ImportError:
             # Fallback to none if rich is not available
-            return lambda it: it
+            return lambda it, **kwargs: it
     elif backend == "tqdm":
         try:
             from tqdm.auto import tqdm
             return partial(tqdm, desc=description) if description else tqdm
         except ImportError:
-            return lambda it: it
+            return lambda it, **kwargs: it
     else:  # none
-        return lambda it: it
+        return lambda it, **kwargs: it
 
 
 def get_progress_context(backend: str = "none"):

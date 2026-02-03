@@ -255,7 +255,7 @@ class TabularModelTuner:
 
         verbose_tabular_model = self.tabular_model_init_kwargs.pop("verbose", False)
 
-        with get_progress_context("rich" if progress_bar else "none") as progress:
+        with get_progress_context("simple" if progress_bar else "none") as progress:
             model_config_iterator = range(len(self.model_config))
             if progress_bar:
                 model_config_iterator = progress.track(

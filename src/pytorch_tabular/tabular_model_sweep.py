@@ -321,8 +321,8 @@ def model_sweep(
     best_model = None
     is_lower_better = rank_metric[1] == "lower_is_better"
     best_score = 1e9 if is_lower_better else -1e9
-    it = get_progress_tracker("rich" if progress_bar else "none")(model_list, description="Sweeping Models")
-    ctx = get_progress_context("rich" if progress_bar else "none")
+    it = get_progress_tracker("simple" if progress_bar else "none")(model_list, description="Sweeping Models")
+    ctx = get_progress_context("simple" if progress_bar else "none")
     with ctx as progress:
         if progress_bar:
             task_p = progress.add_task("Sweeping Models", total=len(model_list))

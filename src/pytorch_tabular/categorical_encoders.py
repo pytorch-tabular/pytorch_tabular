@@ -234,7 +234,7 @@ class CategoricalEmbeddingTransformer(BaseEstimator, TransformerMixin):
         assert all(c in X.columns for c in self.cols)
 
         X_encoded = X.copy(deep=True)
-        for col, mapping in get_progress_tracker("rich")(
+        for col, mapping in get_progress_tracker("none")(
             self._mapping.items(),
             description="Encoding the data...",
         ):

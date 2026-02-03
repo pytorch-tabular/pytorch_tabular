@@ -1234,13 +1234,13 @@ class TabularModel:
         quantiles,
         n_samples,
         ret_logits,
-        progress_bar,
+        progress_tracker,
         is_probabilistic,
     ):
         point_predictions = []
         quantile_predictions = []
         logits_predictions = defaultdict(list)
-        for batch in progress_bar(inference_dataloader):
+        for batch in progress_tracker(inference_dataloader):
             for k, v in batch.items():
                 if isinstance(v, list) and (len(v) == 0):
                     continue  # Skipping empty list
@@ -1377,23 +1377,14 @@ class TabularModel:
         inference_dataloader = self.datamodule.prepare_inference_dataloader(test)
         is_probabilistic = hasattr(model.hparams, "_probabilistic") and model.hparams._probabilistic
 
-        if progress_bar == "rich":
-            from rich.progress import track
-
-            progress_bar = partial(track, description="Generating Predictions...")
-        elif progress_bar == "tqdm":
-            from tqdm.auto import tqdm
-
-            progress_bar = partial(tqdm, description="Generating Predictions...")
-        else:
-            progress_bar = lambda it: it  # E731
+        progress_tracker = get_progress_tracker(progress_bar or "none", description="Generating Predictions...")
         point_predictions, quantile_predictions, logits_predictions = self._generate_predictions(
             model,
             inference_dataloader,
             quantiles,
             n_samples,
             ret_logits,
-            progress_bar,
+            progress_tracker,
             is_probabilistic,
         )
         pred_df = self._format_predicitons(

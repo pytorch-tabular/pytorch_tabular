@@ -24,7 +24,7 @@ class DummyProgress:
         return iterable
 
 
-def get_progress_tracker(backend: str = "rich", description: Optional[str] = None) -> Callable[[Iterator], Iterator]:
+def get_progress_tracker(backend: str = "none", description: Optional[str] = None) -> Callable[[Iterator], Iterator]:
     """Get a progress tracker function based on the backend.
 
     Args:
@@ -51,7 +51,7 @@ def get_progress_tracker(backend: str = "rich", description: Optional[str] = Non
         return lambda it: it
 
 
-def get_progress_context(backend: str = "rich"):
+def get_progress_context(backend: str = "none"):
     """Get a progress context manager based on the backend.
 
     Args:

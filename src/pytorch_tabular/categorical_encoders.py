@@ -12,7 +12,7 @@ except ImportError:
     import pickle
 
 import numpy as np
-from rich.progress import track
+from pytorch_tabular.utils.progress import get_progress_tracker
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from pytorch_tabular.utils import get_logger
@@ -234,10 +234,9 @@ class CategoricalEmbeddingTransformer(BaseEstimator, TransformerMixin):
         assert all(c in X.columns for c in self.cols)
 
         X_encoded = X.copy(deep=True)
-        for col, mapping in track(
+        for col, mapping in get_progress_tracker("none")(
             self._mapping.items(),
             description="Encoding the data...",
-            total=len(self._mapping.values()),
         ):
             for dim in range(mapping[self.NAN_CATEGORY].shape[0]):
                 X_encoded.loc[:, f"{col}_embed_dim_{dim}"] = (

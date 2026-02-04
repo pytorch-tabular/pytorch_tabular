@@ -65,8 +65,8 @@ class DeepFeatureExtractor(BaseEstimator, TransformerMixin):
         self.tabular_model.model.eval()
         inference_dataloader = self.tabular_model.datamodule.prepare_inference_dataloader(X_encoded)
         logits_predictions = defaultdict(list)
-        # Use simple progress bar for feature generation
-        track = get_progress_tracker(backend="simple", description="Generating Features...")
+        # Do not use a progress bar for feature generation by default
+        track = get_progress_tracker(backend="none", description="Generating Features...")
         for batch in track(inference_dataloader):
             for k, v in batch.items():
                 if isinstance(v, list) and (len(v) == 0):

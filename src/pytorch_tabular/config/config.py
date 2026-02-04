@@ -541,7 +541,7 @@ class TrainerConfig:
     )
     progress_bar: str = field(
         default="simple",
-        metadata={"help": "Progress bar type. Can be one of: `none`, `simple`, `rich`. Defaults to `rich`."},
+        metadata={"help": "Progress bar type. Can be one of: `none`, `simple`, `rich`. Defaults to `simple`."},
     )
     precision: str = field(
         default="32",

@@ -48,12 +48,17 @@ dependencies = [
     "omegaconf>=2.3.0",
     "torchmetrics>=0.10.0,<1.9.0",
     "einops>=0.6.0,<0.9.0",
-    "rich>=11.0.0",
     "scikit-base",
 ]
 
 
 [project.optional-dependencies]
+
+# Progress bar backends
+progress = [
+    "rich>=11.0.0",
+    "tqdm>=4.0.0",
+]
 
 dev = [
     "wget",

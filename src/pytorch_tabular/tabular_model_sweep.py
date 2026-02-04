@@ -6,7 +6,6 @@ from typing import Callable, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
-from rich.progress import Progress, track
 from skbase.utils.dependencies import _check_soft_dependencies
 
 from pytorch_tabular import TabularModel, models
@@ -25,6 +24,7 @@ from pytorch_tabular.utils import (
     int_to_human_readable,
     suppress_lightning_logs,
 )
+from pytorch_tabular.utils.progress import get_progress_context, get_progress_tracker
 
 logger = get_logger("pytorch_tabular")
 
@@ -321,10 +321,13 @@ def model_sweep(
     best_model = None
     is_lower_better = rank_metric[1] == "lower_is_better"
     best_score = 1e9 if is_lower_better else -1e9
-    it = track(model_list, description="Sweeping Models") if progress_bar else model_list
-    ctx = Progress() if progress_bar else nullcontext()
+    # Use the configured progress bar backend (simple by default)
+    progress_backend = "simple" if progress_bar else "none"
+    track_fn = get_progress_tracker(progress_backend, description="Sweeping Models")
+    it = track_fn(model_list) if progress_bar else model_list
+    ctx = get_progress_context(progress_backend) if progress_bar else nullcontext()
     with ctx as progress:
-        if progress_bar:
+        if progress_bar and progress_backend != "none" and hasattr(progress, 'add_task'):
             task_p = progress.add_task("Sweeping Models", total=len(model_list))
         for model_config in model_list:
             if isinstance(model_config, str):
@@ -344,7 +347,7 @@ def model_sweep(
             if verbose:
                 logger.info(f"Training {name}")
             model = tabular_model.prepare_model(datamodule)
-            if progress_bar:
+            if progress_bar and progress_backend != "none" and hasattr(progress, 'update'):
                 progress.update(task_p, description=f"Training {name}", advance=1)
             with OutOfMemoryHandler(handle_oom=True) as handler:
                 tabular_model.train(model, datamodule, handle_oom=False)

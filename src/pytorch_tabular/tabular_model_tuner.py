@@ -13,7 +13,6 @@ import numpy as np
 import pandas as pd
 from omegaconf.dictconfig import DictConfig
 from pandas import DataFrame
-from rich.progress import Progress
 from sklearn.model_selection import BaseCrossValidator, ParameterGrid, ParameterSampler
 
 from pytorch_tabular.config import (
@@ -23,6 +22,7 @@ from pytorch_tabular.config import (
     TrainerConfig,
 )
 from pytorch_tabular.tabular_model import TabularModel
+from pytorch_tabular.utils.progress import get_progress_context, get_progress_tracker
 from pytorch_tabular.utils import OOMException, OutOfMemoryHandler, get_logger, suppress_lightning_logs
 
 logger = get_logger(__name__)
@@ -255,12 +255,21 @@ class TabularModelTuner:
 
         verbose_tabular_model = self.tabular_model_init_kwargs.pop("verbose", False)
 
-        with Progress() as progress:
+        # Get appropriate progress backend based on progress_bar flag
+        progress_backend = "simple" if progress_bar else "none"
+        with get_progress_context(progress_backend) as progress:
             model_config_iterator = range(len(self.model_config))
             if progress_bar:
-                model_config_iterator = progress.track(
-                    model_config_iterator, description="[green]Running models config..."
+                track = get_progress_tracker(
+                    progress_backend,
+                    description="Running models config...",
                 )
+                if progress_backend != "none" and hasattr(progress, 'track'):
+                    model_config_iterator = progress.track(
+                        model_config_iterator, description="[green]Running models config..."
+                    )
+                else:
+                    model_config_iterator = track(model_config_iterator)
 
             datamodule = None
             trials = []
@@ -299,10 +308,17 @@ class TabularModelTuner:
                     )
 
                 if progress_bar:
-                    search_space_iterator = progress.track(
-                        search_space_iterator,
-                        description=f"[blue]Training {idx}-{self.model_config[idx].__class__.__name__}...",
+                    track_inner = get_progress_tracker(
+                        progress_backend,
+                        description=f"Training {idx}-{self.model_config[idx].__class__.__name__}...",
                     )
+                    if progress_backend != "none" and hasattr(progress, 'track'):
+                        search_space_iterator = progress.track(
+                            search_space_iterator,
+                            description=f"[blue]Training {idx}-{self.model_config[idx].__class__.__name__}...",
+                        )
+                    else:
+                        search_space_iterator = track_inner(search_space_iterator)
 
                 if isinstance(metric, str):
                     is_callable_metric = False

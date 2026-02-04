@@ -25,7 +25,6 @@ from omegaconf import OmegaConf
 from omegaconf.dictconfig import DictConfig
 from pandas import DataFrame
 from pytorch_lightning import seed_everything
-from pytorch_lightning.callbacks import RichProgressBar
 from pytorch_lightning.callbacks.gradient_accumulation_scheduler import (
     GradientAccumulationScheduler,
 )
@@ -61,6 +60,7 @@ from pytorch_tabular.utils import (
     pl_load,
     suppress_lightning_logs,
 )
+from pytorch_tabular.utils.progress import get_progress_bar_callback, get_progress_tracker
 
 try:
     import captum.attr
@@ -319,8 +319,11 @@ class TabularModel:
             self.config.enable_checkpointing = True
         else:
             self.config.enable_checkpointing = False
-        if self.config.progress_bar == "rich" and self.config.trainer_kwargs.get("enable_progress_bar", True):
-            callbacks.append(RichProgressBar())
+        # Add progress bar callback based on config (if not 'none' or 'simple')
+        if self.config.progress_bar not in ("none", "simple") and self.config.trainer_kwargs.get("enable_progress_bar", True):
+            progress_callback = get_progress_bar_callback(self.config.progress_bar)
+            if progress_callback is not None:
+                callbacks.append(progress_callback)
         if self.verbose:
             logger.debug(f"Callbacks used: {callbacks}")
         return callbacks
@@ -1373,16 +1376,11 @@ class TabularModel:
         inference_dataloader = self.datamodule.prepare_inference_dataloader(test)
         is_probabilistic = hasattr(model.hparams, "_probabilistic") and model.hparams._probabilistic
 
-        if progress_bar == "rich":
-            from rich.progress import track
-
-            progress_bar = partial(track, description="Generating Predictions...")
-        elif progress_bar == "tqdm":
-            from tqdm.auto import tqdm
-
-            progress_bar = partial(tqdm, description="Generating Predictions...")
-        else:
-            progress_bar = lambda it: it  # E731
+        # Get progress tracker based on backend
+        progress_bar = get_progress_tracker(
+            backend=progress_bar,
+            description="Generating Predictions..."
+        )
         point_predictions, quantile_predictions, logits_predictions = self._generate_predictions(
             model,
             inference_dataloader,

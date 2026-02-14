@@ -1498,7 +1498,7 @@ class TabularModel:
                     ret_logits,
                     include_input_features=False,
                     device=device,
-                    progress_bar=progress_bar or "None",
+                    progress_bar=progress_bar or "none",
                 )
                 pred_idx = pred_df.index
                 if self.config.task == "classification":

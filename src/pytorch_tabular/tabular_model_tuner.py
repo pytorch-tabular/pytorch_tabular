@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 from omegaconf.dictconfig import DictConfig
 from pandas import DataFrame
-from rich.progress import Progress
+from pytorch_tabular.utils.progress import get_progress_context
 from sklearn.model_selection import BaseCrossValidator, ParameterGrid, ParameterSampler
 
 from pytorch_tabular.config import (
@@ -255,7 +255,7 @@ class TabularModelTuner:
 
         verbose_tabular_model = self.tabular_model_init_kwargs.pop("verbose", False)
 
-        with Progress() as progress:
+        with get_progress_context("simple" if progress_bar else "none") as progress:
             model_config_iterator = range(len(self.model_config))
             if progress_bar:
                 model_config_iterator = progress.track(

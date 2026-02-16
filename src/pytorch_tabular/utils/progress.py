@@ -51,6 +51,29 @@ def get_progress_tracker(backend: str = "none", description: Optional[str] = Non
         return lambda it, **kwargs: it
 
 
+def get_progress_context(backend: str = "none"):
+    """Get a progress context manager based on the backend.
+
+    Args:
+        backend: The progress bar backend. Can be 'rich', 'tqdm', or 'none'.
+
+    Returns:
+        A context manager for progress tracking that has a track method.
+    """
+    if backend == "rich":
+        try:
+            from rich.progress import Progress
+            return Progress()
+        except ImportError:
+            return DummyProgress()
+    elif backend == "tqdm":
+        # tqdm doesn't have a context manager like rich's Progress
+        # For now, return DummyProgress
+        return DummyProgress()
+    else:
+        return DummyProgress()
+
+
 def get_progress_bar_callback(backend: str = "simple", enable_progress_bar: bool = True):
     """Get the appropriate PyTorch Lightning progress bar callback based on backend.
 

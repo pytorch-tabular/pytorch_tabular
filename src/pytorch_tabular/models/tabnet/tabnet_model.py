@@ -1,15 +1,7 @@
 # Pytorch Tabular
 # Author: Manu Joseph <manujoseph@gmail.com>
 # For license information, see LICENSE.TXT
-"""TabNet Model.
-
-WARNING: The pytorch-tabnet dependency is no longer actively maintained (last update: July 2023).
-This model is provided for backward compatibility but may have compatibility issues with
-newer versions of PyTorch or other dependencies. Consider using alternative models like
-FTTransformer, GANDALF, or TabTransformer for production use.
-
-See: https://github.com/pytorch-tabular/pytorch_tabular/issues/611
-"""
+"""TabNet Model."""
 
 import warnings
 from typing import Dict

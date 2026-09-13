@@ -78,10 +78,19 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      # Resolve as of Dec 2024, when the old hand-pinned set was chosen. Build and
+      # docs tooling is exempt: setuptools>=78.1.1 and mkdocstrings>=0.29 are
+      # required but were released after the cutoff.
       - name: Install main package & dependencies
-        run: uv pip install -e .[dev,dependencies_2024]
+        run: >
+          uv pip install -e .[dev]
+          --exclude-newer-package "setuptools=false"
+          --exclude-newer-package "mkdocstrings=false"
+          --exclude-newer-package "mkdocstrings-python=false"
+          --exclude-newer-package "mkdocs-autorefs=false"
         env:
           UV_SYSTEM_PYTHON: 1
+          UV_EXCLUDE_NEWER: "2024-12-10"
 
       - name: Show installed packages
         run: uv pip list

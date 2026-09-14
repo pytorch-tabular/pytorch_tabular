@@ -132,7 +132,7 @@ jobs:
         run: uv pip list
 
       - name: Restore test's datasets
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: tests/.datasets
           key: test-datasets
@@ -141,7 +141,7 @@ jobs:
         run: python -m pytest -v
 
       - name: Save test's datasets
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: tests/.datasets
           key: test-datasets

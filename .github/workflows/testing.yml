@@ -78,9 +78,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # Resolve as of Dec 2024, when the old hand-pinned set was chosen. Build and
-      # docs tooling is exempt: setuptools>=78.1.1 and mkdocstrings>=0.29 are
-      # required but were released after the cutoff.
+      # Resolve as of Dec 2024, when the old hand-pinned set was chosen. Build,
+      # docs tooling, and scikit-base are exempt: setuptools>=78.1.1 and
+      # mkdocstrings>=0.29 are required but were released after the cutoff,
+      # and tabnet_model.py/test_tabnet.py use scikit-base APIs
+      # (skbase.utils.dependencies._safe_import, skbase.utils.git_diff) that
+      # postdate the pinned scikit-base release available in Dec 2024.
       - name: Install main package & dependencies
         run: >
           uv pip install -e .[dev]
@@ -88,6 +91,7 @@ jobs:
           --exclude-newer-package "mkdocstrings=false"
           --exclude-newer-package "mkdocstrings-python=false"
           --exclude-newer-package "mkdocs-autorefs=false"
+          --exclude-newer-package "scikit-base=false"
         env:
           UV_SYSTEM_PYTHON: 1
           UV_EXCLUDE_NEWER: "2024-12-10"

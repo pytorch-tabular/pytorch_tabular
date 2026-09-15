@@ -192,9 +192,9 @@ class DataConfig:
     )
 
     def __post_init__(self):
-        assert (
-            len(self.categorical_cols) + len(self.continuous_cols) + len(self.date_columns) > 0
-        ), "There should be at-least one feature defined in categorical, continuous, or date columns"
+        assert len(self.categorical_cols) + len(self.continuous_cols) + len(self.date_columns) > 0, (
+            "There should be at-least one feature defined in categorical, continuous, or date columns"
+        )
         _validate_choices(self)
         if os.name == "nt" and self.num_workers != 0:
             print("Windows does not support num_workers > 0. Setting num_workers to 0")
@@ -255,9 +255,9 @@ class InferredConfig:
 
     def __post_init__(self):
         if self.embedding_dims is not None:
-            assert all(
-                (isinstance(t, Iterable) and len(t) == 2) for t in self.embedding_dims
-            ), "embedding_dims must be a list of tuples (cardinality, embedding_dim)"
+            assert all((isinstance(t, Iterable) and len(t) == 2) for t in self.embedding_dims), (
+                "embedding_dims must be a list of tuples (cardinality, embedding_dim)"
+            )
             self.embedded_cat_dim = sum([t[1] for t in self.embedding_dims])
         else:
             self.embedded_cat_dim = 0
@@ -287,8 +287,8 @@ class TrainerConfig:
                 'cpu','gpu','tpu','ipu', 'mps', 'auto'. Defaults to 'auto'.
                 Choices are: [`cpu`,`gpu`,`tpu`,`ipu`,'mps',`auto`].
 
-        devices (Optional[int]): Number of devices to train on (int). -1 uses all available devices. By
-                default, uses all available devices (-1)
+        devices (Union[int, List[int]]): Number of devices to train on (int), or list of device indices.
+                -1 uses all available devices. By default, uses all available devices (-1)
 
         devices_list (Optional[List[int]]): List of devices to train on (list). If specified, takes
                 precedence over `devices` argument. Defaults to None
@@ -400,7 +400,7 @@ class TrainerConfig:
             "choices": ["cpu", "gpu", "tpu", "ipu", "mps", "auto"],
         },
     )
-    devices: Optional[int] = field(
+    devices: Any = field(
         default=-1,
         metadata={
             "help": "Number of devices to train on. -1 uses all available devices."

@@ -108,7 +108,9 @@ def fake_metric(y_hat, y):
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize("custom_metrics", [None, [fake_metric]])
 @pytest.mark.parametrize("custom_loss", [None, torch.nn.L1Loss()])
-@pytest.mark.parametrize("custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"])
+@pytest.mark.parametrize(
+    "custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"]
+)
 @pytest.mark.parametrize("cache_data", ["memory", "disk"])
 @pytest.mark.parametrize("inference_only", [True, False])
 def test_save_load(
@@ -286,7 +288,9 @@ def test_feature_importance(
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize("custom_metrics", [None, [fake_metric]])
 @pytest.mark.parametrize("custom_loss", [None, torch.nn.L1Loss()])
-@pytest.mark.parametrize("custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"])
+@pytest.mark.parametrize(
+    "custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"]
+)
 def test_save_load_statedict(
     regression_data,
     model_config_class,
@@ -379,7 +383,9 @@ def test_save_load_statedict(
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize("custom_metrics", [None, [fake_metric]])
 @pytest.mark.parametrize("custom_loss", [None, torch.nn.L1Loss()])
-@pytest.mark.parametrize("custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"])
+@pytest.mark.parametrize(
+    "custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"]
+)
 @pytest.mark.parametrize("save_type", ["pytorch"])  # "onnx"
 def test_save_for_inference(
     regression_data,
@@ -541,7 +547,7 @@ def _test_captum(
         "MDNModel",
         "TabTransformerModel",
     ]
-    if is_full_baselines and (baselines is None or isinstance(baselines, (float, int))):
+    if is_full_baselines and (baselines is None or isinstance(baselines, float | int)):
         with pytest.raises(ValueError):
             exp = tabular_model.explain(test, method=attr_method, baselines=baselines)
         return
@@ -555,7 +561,11 @@ def _test_captum(
         return
     else:
         exp = tabular_model.explain(test, method=attr_method, baselines=baselines)
-    assert exp.shape[1] == tabular_model.model.hparams.continuous_dim + tabular_model.model.hparams.categorical_dim
+    assert (
+        exp.shape[1]
+        == tabular_model.model.hparams.continuous_dim
+        + tabular_model.model.hparams.categorical_dim
+    )
 
 
 @pytest.mark.skipif(
@@ -707,7 +717,9 @@ def _run_cv(
     return cv_scores, oof_predictions
 
 
-@pytest.mark.parametrize("model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})])
+@pytest.mark.parametrize(
+    "model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})]
+)
 @pytest.mark.parametrize("continuous_cols", [list(DATASET_CONTINUOUS_COLUMNS)])
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize("cv", [5, KFold(n_splits=3, shuffle=True, random_state=42)])
@@ -716,7 +728,9 @@ def _run_cv(
     [
         "loss",
         None,
-        lambda y_true, y_pred: r2_score(y_true, y_pred["MedHouseVal_prediction"].values),
+        lambda y_true, y_pred: r2_score(
+            y_true, y_pred["MedHouseVal_prediction"].values
+        ),
     ],
 )
 @pytest.mark.parametrize("return_oof", [True])
@@ -763,7 +777,9 @@ def test_cross_validate_regression(
         assert len(oof_predictions) == cv_splits
 
 
-@pytest.mark.parametrize("model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})])
+@pytest.mark.parametrize(
+    "model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})]
+)
 @pytest.mark.parametrize(
     "continuous_cols",
     [
@@ -777,7 +793,9 @@ def test_cross_validate_regression(
     [
         "accuracy",
         None,
-        lambda y_true, y_pred: accuracy_score(y_true, y_pred["target_prediction"].values),
+        lambda y_true, y_pred: accuracy_score(
+            y_true, y_pred["target_prediction"].values
+        ),
     ],
 )
 @pytest.mark.parametrize("return_oof", [True])
@@ -824,7 +842,9 @@ def test_cross_validate_classification(
         assert len(oof_predictions) == cv_splits
 
 
-@pytest.mark.parametrize("model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})])
+@pytest.mark.parametrize(
+    "model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})]
+)
 @pytest.mark.parametrize("continuous_cols", [list(DATASET_CONTINUOUS_COLUMNS)])
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize("cv", [None, "validation", 5])
@@ -832,10 +852,12 @@ def test_cross_validate_classification(
     "metric",
     [
         "loss",
-        lambda y_true, y_pred: r2_score(y_true, y_pred["MedHouseVal_prediction"].values),
+        lambda y_true, y_pred: r2_score(
+            y_true, y_pred["MedHouseVal_prediction"].values
+        ),
     ],
 )
-@pytest.mark.parametrize("strategy", ["grid_search", "random_search"])
+@pytest.mark.parametrize("strategy", ["grid_search", "random_search", "optuna"])
 def test_tuner(
     regression_data,
     model_config_class,
@@ -904,6 +926,9 @@ def test_tuner(
         assert len(result.trials_df) == 2
     metric_str = metric.__name__ if callable(metric) else metric
     assert result.best_score in result.trials_df[metric_str].values.tolist()
+    if strategy == "optuna":
+        assert result.study is not None
+        assert len(result.study.trials) == 2
 
 
 def _run_bagging(
@@ -941,7 +966,9 @@ def _run_bagging(
     return pred_df
 
 
-@pytest.mark.parametrize("model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})])
+@pytest.mark.parametrize(
+    "model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})]
+)
 @pytest.mark.parametrize(
     "continuous_cols",
     [
@@ -983,10 +1010,18 @@ def test_bagging_classification(
         aggregate,
     )
     assert len(pred_df) == len(test)
-    assert len(set(pred_df["prediction"].values.tolist()) - set(test[target[0]].values.tolist())) == 0
+    assert (
+        len(
+            set(pred_df["prediction"].values.tolist())
+            - set(test[target[0]].values.tolist())
+        )
+        == 0
+    )
 
 
-@pytest.mark.parametrize("model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})])
+@pytest.mark.parametrize(
+    "model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})]
+)
 @pytest.mark.parametrize("continuous_cols", [list(DATASET_CONTINUOUS_COLUMNS)])
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize("cv", [2, KFold(n_splits=3, shuffle=True, random_state=42)])
@@ -1063,11 +1098,15 @@ def _run_tta(
         trainer_config=trainer_config,
     )
     tabular_model.fit(train)
-    pred_df = tabular_model.predict(test, test_time_augmentation=True, num_tta=2, aggregate_tta=aggregate)
+    pred_df = tabular_model.predict(
+        test, test_time_augmentation=True, num_tta=2, aggregate_tta=aggregate
+    )
     return pred_df
 
 
-@pytest.mark.parametrize("model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})])
+@pytest.mark.parametrize(
+    "model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})]
+)
 @pytest.mark.parametrize(
     "continuous_cols",
     [
@@ -1106,10 +1145,18 @@ def test_tta_classification(
         aggregate,
     )
     assert len(pred_df) == len(test)
-    assert len(set(pred_df["prediction"].values.tolist()) - set(test[target[0]].values.tolist())) == 0
+    assert (
+        len(
+            set(pred_df["prediction"].values.tolist())
+            - set(test[target[0]].values.tolist())
+        )
+        == 0
+    )
 
 
-@pytest.mark.parametrize("model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})])
+@pytest.mark.parametrize(
+    "model_config_class", [(CategoryEmbeddingModelConfig, {"layers": "10-20"})]
+)
 @pytest.mark.parametrize("continuous_cols", [list(DATASET_CONTINUOUS_COLUMNS)])
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize(
@@ -1167,7 +1214,15 @@ def test_tta_regression(
 
 
 def _run_model_compare(
-    task, model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric
+    task,
+    model_list,
+    data_config,
+    trainer_config,
+    optimizer_config,
+    train,
+    test,
+    metric,
+    rank_metric,
 ):
     model_list = copy.deepcopy(model_list)
     if isinstance(model_list, list):
@@ -1204,9 +1259,16 @@ def _run_model_compare(
         (["accuracy", "f1_score"], [{}, {"average": "macro"}], [False, True]),
     ],
 )
-@pytest.mark.parametrize("rank_metric", [("accuracy", "higher_is_better"), ("loss", "lower_is_better")])
+@pytest.mark.parametrize(
+    "rank_metric", [("accuracy", "higher_is_better"), ("loss", "lower_is_better")]
+)
 def test_model_compare_classification(
-    classification_data, model_list, continuous_cols, categorical_cols, metric, rank_metric
+    classification_data,
+    model_list,
+    continuous_cols,
+    categorical_cols,
+    metric,
+    rank_metric,
 ):
     (train, test, target) = classification_data
     data_config = DataConfig(
@@ -1217,11 +1279,23 @@ def test_model_compare_classification(
         handle_unknown_categories=True,
     )
     trainer_config = TrainerConfig(
-        max_epochs=1, checkpoints=None, early_stopping=None, accelerator="cpu", fast_dev_run=True
+        max_epochs=1,
+        checkpoints=None,
+        early_stopping=None,
+        accelerator="cpu",
+        fast_dev_run=True,
     )
     optimizer_config = OptimizerConfig()
     comp_df, best_model = _run_model_compare(
-        "classification", model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric
+        "classification",
+        model_list,
+        data_config,
+        trainer_config,
+        optimizer_config,
+        train,
+        test,
+        metric,
+        rank_metric,
     )
     if model_list == "lite" and TABNET_AVAILABLE:
         expected_len = 3
@@ -1246,8 +1320,13 @@ def test_model_compare_classification(
         (["mean_squared_error"], [{}], [False]),
     ],
 )
-@pytest.mark.parametrize("rank_metric", [("mean_squared_error", "lower_is_better"), ("loss", "lower_is_better")])
-def test_model_compare_regression(regression_data, model_list, continuous_cols, categorical_cols, metric, rank_metric):
+@pytest.mark.parametrize(
+    "rank_metric",
+    [("mean_squared_error", "lower_is_better"), ("loss", "lower_is_better")],
+)
+def test_model_compare_regression(
+    regression_data, model_list, continuous_cols, categorical_cols, metric, rank_metric
+):
     (train, test, target) = regression_data
     data_config = DataConfig(
         target=target,
@@ -1265,7 +1344,15 @@ def test_model_compare_regression(regression_data, model_list, continuous_cols, 
     )
     optimizer_config = OptimizerConfig()
     comp_df, best_model = _run_model_compare(
-        "regression", model_list, data_config, trainer_config, optimizer_config, train, test, metric, rank_metric
+        "regression",
+        model_list,
+        data_config,
+        trainer_config,
+        optimizer_config,
+        train,
+        test,
+        metric,
+        rank_metric,
     )
     if model_list == "lite" and TABNET_AVAILABLE:
         expected_len = 3
@@ -1286,7 +1373,9 @@ def test_model_compare_regression(regression_data, model_list, continuous_cols, 
 @pytest.mark.parametrize("categorical_cols", [["HouseAgeBin"]])
 @pytest.mark.parametrize("custom_metrics", [None, [fake_metric]])
 @pytest.mark.parametrize("custom_loss", [None, torch.nn.L1Loss()])
-@pytest.mark.parametrize("custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"])
+@pytest.mark.parametrize(
+    "custom_optimizer", [None, torch.optim.Adagrad, "SGD", "torch_optimizer.AdaBound"]
+)
 def test_str_repr(
     regression_data,
     model_config_class,

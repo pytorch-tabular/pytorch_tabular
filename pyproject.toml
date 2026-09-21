@@ -65,6 +65,7 @@ dev = [
     "pytest>=5.3.2",
     "pytest-runner>=5.1",
     "torch_optimizer",
+    "optuna>=3.0.0",
 ]
 
 extra = [
@@ -73,6 +74,7 @@ extra = [
     "kaleido>=0.2.0,<1.5.0",
     "captum>=0.5.0,<0.10.0",
     "pytorch-tabnet<4.2",
+    "optuna>=3.0.0",
 ]
 
 notebooks = [
@@ -136,6 +138,7 @@ extend-select = [
 ]
 ignore = [
     "E731",  # Do not assign a lambda expression, use a def
+    "E501",  # Line too long, handled by formatter
 ]
 # Exclude a variety of commonly ignored directories.
 exclude = [

@@ -141,7 +141,6 @@ loaded_model = TabularModel.load_model("examples/basic")
 
 ## Future Roadmap(Contributions are Welcome)
 
-1. Integrate Optuna Hyperparameter Tuning
 1. Migrate Datamodule to Polars or NVTabular for faster data loading and to handle larger than RAM datasets.
 1. Add GaussRank as Feature Transformation
 1. Have a scikit-learn compatible API

@@ -79,12 +79,16 @@ class RSoftmax(torch.nn.Module):
         input_minus_maxes = input - maxes
 
         zeros_mask = torch.exp(input_minus_maxes) == 0.0
-        zeros_frac = zeros_mask.sum(dim=dim, keepdim=True).float() / input_minus_maxes.shape[dim]
+        zeros_frac = (
+            zeros_mask.sum(dim=dim, keepdim=True).float() / input_minus_maxes.shape[dim]
+        )
 
         q = torch.clamp((r - zeros_frac) / (1 - zeros_frac), min=0.0, max=1.0)
         x_minus_maxes = input_minus_maxes * (~zeros_mask).float()
         if q.ndim > 1:
-            t = -torch.quantile(x_minus_maxes, q.view(-1), dim=dim, keepdim=True).detach()
+            t = -torch.quantile(
+                x_minus_maxes, q.view(-1), dim=dim, keepdim=True
+            ).detach()
             t = t.squeeze(dim).diagonal(dim1=-2, dim2=-1).unsqueeze(-1) + eps
         else:
             t = -torch.quantile(x_minus_maxes, q, dim=dim).detach() + eps
@@ -121,7 +125,7 @@ def _roll_last(X, dim):
     if dim == -1:
         return X
     elif dim < 0:
-        dim = X.dim() - dim
+        dim = X.dim() + dim
 
     perm = [i for i in range(X.dim()) if i != dim] + [dim]
     return X.permute(perm)
